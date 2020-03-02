@@ -4,13 +4,13 @@ import (
 	"fmt"
 )
 
-func main(){
-	var n = []int{1,2,3,4}
+func main() {
+	var n = []int{1, 2, 3, 4}
 	for key, value := range n[1:2] {
 		fmt.Printf("key:%d  value:%d\n", key, value)
 	}
 
-	var str = "hello 你好"
+	var str = "hello world"
 	for key, value := range str[1:2] {
 		fmt.Printf("key:%d value:0x%x\n", key, value)
 	}
@@ -34,4 +34,3 @@ func main(){
 		fmt.Println(v)
 	}
 }
-
