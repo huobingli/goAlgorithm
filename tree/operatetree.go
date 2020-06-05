@@ -23,7 +23,7 @@ func main() {
 	root.Right = b
 	// 使用 Operater 接口实现对二叉树的基本操作
 	var it Operater
-	//it = root
+	it = root
 	it.PrintBT()
 	fmt.Println()
 	fmt.Println("The depths of the Btree is:", it.Depth())
