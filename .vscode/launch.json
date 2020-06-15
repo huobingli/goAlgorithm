@@ -5,13 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch",
+            "name": "main.go",
             "type": "go",
             "request": "launch",
-            "mode": "auto",
-            "program": "${workspaceRoot}/learn/webserver",
+            "mode": "debug",
+            "remotePath": "",
+            "port": 2345,
+            "host": "127.0.0.1",
+            "program": "${workspaceRoot}/learn/webserver",//工作空间路径
             "env": {},
-            "args": []
+            "args": [],
+            "showLog": true
         }
     ]
 }
