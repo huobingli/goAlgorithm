@@ -17,6 +17,15 @@ func print(slist ...interface{}) {
 	rawPrint(slist...)
 	rawPrint(slist)
 }
+
+// arg是不定数量的参数, 变量arg是一个int的slice：
+func myfunc(arg ...int) {
+	for _, n := range arg {
+		fmt.Printf("And the number is: %d\n", n)
+	}
+}
+
 func main() {
 	print(1, 2, 3)
+	myfunc(1, 2, 3)
 }
