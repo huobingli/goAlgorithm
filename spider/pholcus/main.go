@@ -1,9 +1,8 @@
 package main
 
-import (
-	"github.com/henrylee2cn/pholcus/exec"
-	// _ "pholcus_lib_pte" // 同样你也可以自由添加自己的规则库
-)
+import "github.com/henrylee2cn/pholcus/exec"
+
+// _ "pholcus_lib_pte" // 同样你也可以自由添加自己的规则库
 
 func main() {
 	// 设置运行时默认操作界面，并开始运行
