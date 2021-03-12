@@ -38,7 +38,12 @@ func unicode2utf8(source string) string {
 }
 
 func GetHtml() string {
-	url := "http://ft.10jqka.com.cn/thsft/iFindService/Chain/industry-map/get-all-company?chart_id=39323263116075000051554&chart_type=qc&ismine=0"
+	//关联关系
+	url := "http://ft.10jqka.com.cn/thsft/iFindService/Chain/industry-map/get-share-chart?type=qc&content_id=1419"
+	// 类型
+	//url := "http://ft.10jqka.com.cn/thsft/iFindService/Chain/industry-map/get-cpt-chart-list?chain_id=50"
+	// 最后数据
+	//url := "http://ft.10jqka.com.cn/thsft/iFindService/Chain/industry-map/get-all-company?chart_id=39323263116075000051554&chart_type=qc&ismine=0"
 	//url := "http://gpc.10jqka.com.cn/dptrend/window/textinfo/windindicator"
 	//url:="http://gdzx.10jqka.com.cn/sfzx/cpzg/index/version/1?usecef=1"
 	req, err := http.NewRequest("GET", url, nil)
