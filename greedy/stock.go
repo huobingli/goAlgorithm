@@ -1,7 +1,7 @@
 package main
 
 import "fmt"
-
+import "flag"
 /*
 给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
 
@@ -20,7 +20,7 @@ import "fmt"
 输出：0
 解释：在这种情况下, 没有交易完成, 所以最大利润为 0。
 */ 
-
+	
 func maxProfit(prices []int) int {
 	for a, v := range prices {
 		fmt.Printf("And the number is: %d, %d\n", a, v)
@@ -31,6 +31,12 @@ func maxProfit(prices []int) int {
 
 
 func main() {
-	var stock = []int{1,2,3,4}
-	maxProfit(stock)
+	// var stock = []int{1,2,3,4}
+	// maxProfit(stock)
+
+	var envfile string
+	flag.StringVar(&envfile, "env-file", ".env", "Read in a file of environment variables")
+	flag.Parse()
+
+	print(envfile)
 }
