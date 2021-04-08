@@ -12,8 +12,8 @@ func main() {
 
 	// 演示一些简便操作
 	aSlice = array[:3] // 等价于aSlice = array[0:3] aSlice包含元素: a,b,c
-
 	fmt.Println(aSlice)
+
 	aSlice = array[5:] // 等价于aSlice = array[5:10] aSlice包含元素: f,g,h,i,j
 	fmt.Println(aSlice)
 	aSlice = array[:] // 等价于aSlice = array[0:10] 这样aSlice包含了全部的元素
@@ -35,4 +35,12 @@ func main() {
 	bSlice[1] = 'z'
 	fmt.Println(aSlice)
 	fmt.Println(array)
+
+	println("-----------")
+
+	var slice1 []byte
+	slice1 = append(aSlice, 0)
+	println(aSlice)
+	println(slice1)
+	fmt.Println(slice1)
 }
