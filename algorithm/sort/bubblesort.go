@@ -16,9 +16,10 @@ func main() {
 		fmt.Println("--------第", i+1, "次冒泡--------")
 		for j := i; j <= n-1; j++ {
 			if arr[i] > arr[j] {
-				t := arr[i]
-				arr[i] = arr[j]
-				arr[j] = t
+				// t := arr[i]
+				// arr[i] = arr[j]
+				// arr[j] = t
+				arr[i], arr[j] = arr[j], arr[i] // 简化写法
 			}
 			fmt.Println(arr)
 		}
