@@ -1,3 +1,4 @@
+// 字符串匹配之 Trie 树
 package main
 
 import (
@@ -5,7 +6,6 @@ import (
 	"time"
 )
 
-// 字符串匹配之 Trie 树
 // Trie 树节点
 type trieNode struct {
 	char     string             // Unicode 字符
