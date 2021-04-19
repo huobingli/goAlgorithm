@@ -1,4 +1,6 @@
 // 字符串匹配之 Trie 树
+
+// 敏感词过滤、关键词联想、代码补全
 package main
 
 import (
