@@ -14,11 +14,10 @@ func HelloHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	go func() {
+	// http.HandleFunc("/index", IndexHandler)
 
-	}()
-	http.HandleFunc("/index", IndexHandler)
+	// http.HandleFunc("/hello", HelloHandler)
+	// fmt.Println(http.ListenAndServe("0.0.0.0:8090", nil))
 
-	http.HandleFunc("/hello", HelloHandler)
-	fmt.Println(http.ListenAndServe("0.0.0.0:8090", nil))
+	openfile()
 }
