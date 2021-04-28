@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	fileoper "../goserver/fileoper"
 )
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
@@ -19,5 +21,5 @@ func main() {
 	// http.HandleFunc("/hello", HelloHandler)
 	// fmt.Println(http.ListenAndServe("0.0.0.0:8090", nil))
 
-	openfile()
+	fileoper.Openfile()
 }
