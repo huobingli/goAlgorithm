@@ -24,12 +24,12 @@ func TimeParseYYYYMMDD(in string, sub string) (out time.Time, err error) {
 	return
 }
 
-func getCurDay() (date int){
+func getCurDay() (date int) {
 	curTime := time.Now()
 	year := curTime.Year()
 	month := int(curTime.Month())
 	day := curTime.Day()
-	return year * 10000 + month * 100 + day
+	return year*10000 + month*100 + day
 }
 
 // 文件格式 日期_创建时间
@@ -62,7 +62,7 @@ func cleanfile(w http.ResponseWriter, r *http.Request) {
 				fmt.Print("strconv.Atoi, err:%v\n", err)
 			}
 
-			if dirDate < curDay - 100 {
+			if dirDate < curDay-100 {
 				fmt.Println(dirDate)
 				removeDir := BaseUploadPath + dirname
 				os.RemoveAll(removeDir)
@@ -74,6 +74,7 @@ func cleanfile(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// https://blog.csdn.net/whatday/article/details/109620192
 func getdiskinfo(w http.ResponseWriter, r *http.Request) {
 	parts, err := disk.Partitions(true)
 	if err != nil {
