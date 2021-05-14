@@ -32,7 +32,7 @@ func getCurDay() (date int) {
 	return year*10000 + month*100 + day
 }
 
-// 文件格式 日期_创建时间
+// 清理目录中一个月前的的临时文件  文件格式 日期_创建时间
 func cleanfile(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "start clean file ... please wait !!")
 
@@ -45,14 +45,11 @@ func cleanfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//suffix = strings.ToLower(suffix) //匹配后缀
-
 	for _, _file := range _dir {
 		if _file.IsDir() {
 			dirname := _file.Name()
-			//print(dirname)
-			//print("not dir")
 
+			// 根据“_”分割文件名
 			comm := strings.Index(dirname, "_")
 
 			strDirDate := dirname[:comm]
@@ -67,13 +64,12 @@ func cleanfile(w http.ResponseWriter, r *http.Request) {
 				removeDir := BaseUploadPath + dirname
 				os.RemoveAll(removeDir)
 			}
-
-			continue //忽略目录
 		}
 	}
 
 }
 
+// 后面想获取磁盘信息，预留一下口子与参考blog
 // https://blog.csdn.net/whatday/article/details/109620192
 func getdiskinfo(w http.ResponseWriter, r *http.Request) {
 	parts, err := disk.Partitions(true)
@@ -96,17 +92,12 @@ func getdiskinfo(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprintln(disk_info)
 }
 
-// func showall(w http.ResponseWriter, r *http.Request) {
-// 	// print("list ")
-// 	fmt.Fprintln(w, "show file list!")
-// 	http.Handle("/", http.FileServer(http.Dir(".")))
-// }
-
 func main() {
-	// 文件服务器
+	// 其他接口
 	http.HandleFunc("/cleanfile", cleanfile)
 	http.HandleFunc("/getdiskinfo", getdiskinfo)
 
+	// 文件服务器
 	http.Handle("/", http.FileServer(http.Dir(BaseUploadPath)))
 	err := http.ListenAndServe(":3000", nil)
 	if err != nil {
