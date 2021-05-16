@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
 )
 
@@ -67,6 +68,12 @@ func cleanfile(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+}
+
+func GetCpuPercent() float64 {
+	percent, _ := cpu.Percent(time.Second, false)
+	print(percent[0])
+	return percent[0]
 }
 
 // 后面想获取磁盘信息，预留一下口子与参考blog
