@@ -12,6 +12,7 @@ import (
 
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
+	"github.com/shirou/gopsutil/mem"
 )
 
 const BaseUploadPath = "C:\\ci_auto_publish\\"
@@ -39,8 +40,7 @@ func cleanfile(w http.ResponseWriter, r *http.Request) {
 
 	curDay := getCurDay()
 
-	//files = []string{}
-
+	// 读取上传目录下文件名
 	_dir, err := ioutil.ReadDir(BaseUploadPath)
 	if err != nil {
 		return
@@ -50,9 +50,8 @@ func cleanfile(w http.ResponseWriter, r *http.Request) {
 		if _file.IsDir() {
 			dirname := _file.Name()
 
-			// 根据“_”分割文件名
+			// 分割文件名，找到文件夹名中时间
 			comm := strings.Index(dirname, "_")
-
 			strDirDate := dirname[:comm]
 
 			dirDate, err := strconv.Atoi(strDirDate)
@@ -60,6 +59,7 @@ func cleanfile(w http.ResponseWriter, r *http.Request) {
 				fmt.Print("strconv.Atoi, err:%v\n", err)
 			}
 
+			// 遍历删除一个月前的文件夹
 			if dirDate < curDay-100 {
 				fmt.Println(dirDate)
 				removeDir := BaseUploadPath + dirname
@@ -70,14 +70,28 @@ func cleanfile(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// 获取CPU使用情况
 func GetCpuPercent() float64 {
 	percent, _ := cpu.Percent(time.Second, false)
-	print(percent[0])
 	return percent[0]
+}
+
+// 获取内存使用情况
+func GetMemPercent() float64 {
+	memInfo, _ := mem.VirtualMemory()
+	return memInfo.UsedPercent
+}
+
+// 获取磁盘使用情况
+func GetDiskPercent() float64 {
+	parts, _ := disk.Partitions(true)
+	diskInfo, _ := disk.Usage(parts[0].Mountpoint)
+	return diskInfo.UsedPercent
 }
 
 // 后面想获取磁盘信息，预留一下口子与参考blog
 // https://blog.csdn.net/whatday/article/details/109620192
+// TODO需要调试一下输出
 func getdiskinfo(w http.ResponseWriter, r *http.Request) {
 	parts, err := disk.Partitions(true)
 	if err != nil {
@@ -88,26 +102,35 @@ func getdiskinfo(w http.ResponseWriter, r *http.Request) {
 	for _, part := range parts {
 		fmt.Print("part:%v\n", part.String())
 		diskInfo, _ := disk.Usage(part.Mountpoint)
-		fmt.Print("disk info:used:%v free:%v\n", diskInfo.UsedPercent, diskInfo.Free)
+		fmt.Print("disk info:used:%f free:%f\n", diskInfo.UsedPercent, diskInfo.Free)
 	}
 
 	ioStat, _ := disk.IOCounters()
+	strOut := ""
 	for k, v := range ioStat {
-		fmt.Print("%v:%v\n", k, v)
+		strtmp := fmt.Sprintf("%v:%v\n", k, v)
+		strOut += strtmp
 	}
 
-	// fmt.Fprintln(disk_info)
+	fmt.Fprintln(w, strOut)
 }
 
 func main() {
+	mux := http.NewServeMux()
+
 	// 其他接口
-	http.HandleFunc("/cleanfile", cleanfile)
-	http.HandleFunc("/getdiskinfo", getdiskinfo)
+	mux.HandleFunc("/cleanfile", cleanfile)
+	mux.HandleFunc("/getdiskinfo", getdiskinfo)
 
 	// 文件服务器
-	http.Handle("/", http.FileServer(http.Dir(BaseUploadPath)))
-	err := http.ListenAndServe(":3000", nil)
-	if err != nil {
-		log.Fatal("Server run fail")
+	mux.Handle("/", http.FileServer(http.Dir(BaseUploadPath)))
+
+	server := &http.Server{
+		Addr:    ":3000",
+		Handler: mux,
+	}
+
+	if err := server.ListenAndServe(); err != nil {
+		log.Fatal(err)
 	}
 }
