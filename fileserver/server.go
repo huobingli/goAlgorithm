@@ -126,7 +126,7 @@ func main() {
 	mux.Handle("/", http.FileServer(http.Dir(BaseUploadPath)))
 
 	server := &http.Server{
-		Addr:    ":3000",
+		Addr:    ":8081",
 		Handler: mux,
 	}
 
