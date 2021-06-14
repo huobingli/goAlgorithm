@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 
 	"github.com/garyburd/redigo/redis"
 )
@@ -15,15 +16,16 @@ func main() {
 		return
 	}
 	defer conn.Close()
-
-	_, err = conn.Do("SET", "youmen", "18")
+	_, err = conn.Do("LPUSH", "list1", "l1", "l2", "l3")
 	if err != nil {
-		fmt.Println("redis set error:", err)
+		fmt.Println("redis mset error:", err)
 	}
-	// name, err := redis.String(conn.Do("GET", "youmen"))
-	// if err != nil {
-	// 	fmt.Println("redis get error:", err)
-	// } else {
-	// 	fmt.Printf("Get name: %s \n", name)
-	// }
+	res, err := redis.String(conn.Do("LPOP", "list1"))
+	if err != nil {
+		fmt.Println("redis POP error:", err)
+	} else {
+		res_type := reflect.TypeOf(res)
+		fmt.Printf("res type : %s \n", res_type)
+		fmt.Printf("res  : %s \n", res)
+	}
 }
