@@ -19,6 +19,7 @@ func main() {
 	router.POST("/upload_muti_file", HandleUploadMutiFile)
 	router.GET("/download", HandleDownloadFile)
 	router.GET("/getUrl", Get)
+	router.GET("/file", HandleShowFile)
 	router.Run(":7001")
 }
 
@@ -104,11 +105,22 @@ func HandleUploadMutiFile(c *gin.Context) {
 
 // HandleDownloadFile 下载文件
 func HandleDownloadFile(c *gin.Context) {
-	content := c.Query("content")
-	content = "hello world, 我是一个文件，" + content
+	//content := c.Query("content")
+	//content = "hello world, 我是一个文件，" + content
+
+	filename := c.Query("content")
+	path := "D:\\ci\\autoBuild\\cd-tool\\output\\build\\"
+	filepath := path + filename
 	c.Writer.WriteHeader(http.StatusOK)
-	c.Header("Content-Disposition", "attachment; filename=hello.txt")
+	// 返回文件名
+	c.Header("Content-Disposition", "attachment; filename=" + filename)
 	c.Header("Content-Type", "application/text/plain")
-	c.Header("Accept-Length", fmt.Sprintf("%d", len(content)))
-	c.Writer.Write([]byte(content))
+	c.File(filepath)
+}
+
+func HandleShowFile(c *gin.Context) {
+	path := "D:\\ci\\autoBuild\\cd-tool\\output\\build\\"
+	fileName := path + c.Query("name")
+	fmt.Println(fileName)
+	c.File(fileName)
 }
