@@ -34,6 +34,29 @@ func getCurDay() (date int) {
 	return year*10000 + month*100 + day
 }
 
+func downfile(w http.ResponseWriter, r *http.Request) {
+	//filename := get_filename_from_request()
+	//r
+
+	fmt.Fprintln(w, r.Method)
+	// file, _ := os.Open(filename)
+	// defer file.Close()
+
+	// fileHeader := make([]byte, 512)
+	// file.Read(fileHeader)
+
+	// fileStat, _ := file.Stat()
+
+	// w.Header().Set("Content-Disposition", "attachment; filename=" + filename)
+	// w.Header().Set("Content-Type", http.DetectContentType(fileHeader))
+	// w.Header().Set("Content-Length", strconv.FormatInt(fileStat.Size(), 10))
+
+	// file.Seek(0, 0)
+	// io.Copy(w, file)
+
+	// return
+}
+
 // 清理目录中一个月前的的临时文件  文件格式 日期_创建时间
 func cleanfile(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "start clean file ... please wait !!")
@@ -121,6 +144,7 @@ func main() {
 	// 其他接口
 	mux.HandleFunc("/cleanfile", cleanfile)
 	mux.HandleFunc("/getdiskinfo", getdiskinfo)
+	mux.HandleFunc("/downfile", downfile)
 
 	// 文件服务器
 	mux.Handle("/", http.FileServer(http.Dir(BaseUploadPath)))

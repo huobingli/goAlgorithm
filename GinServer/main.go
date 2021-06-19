@@ -12,6 +12,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const BaseUploadPath = "C:\\ci_auto_publish\\"
+
 //启动
 func main() {
 	router := gin.Default()
@@ -20,6 +22,7 @@ func main() {
 	router.GET("/download", HandleDownloadFile)
 	router.GET("/getUrl", Get)
 	router.GET("/file", HandleShowFile)
+	//router.GET("/", HandleShowFile)
 	router.Run(":7001")
 }
 
@@ -119,8 +122,12 @@ func HandleDownloadFile(c *gin.Context) {
 }
 
 func HandleShowFile(c *gin.Context) {
-	path := "D:\\ci\\autoBuild\\cd-tool\\output\\build\\"
-	fileName := path + c.Query("name")
-	fmt.Println(fileName)
-	c.File(fileName)
+	//path := "D:\\ci\\autoBuild\\cd-tool\\output\\build\\"
+	//fileName := path + c.Query("name")
+	//fmt.Println(fileName)
+	//c.File(fileName)
+
+	http.FileServer(http.Dir(BaseUploadPath))
+	//http.FileServer()
+
 }
