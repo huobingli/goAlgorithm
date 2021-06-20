@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -15,7 +16,7 @@ import (
 	"github.com/shirou/gopsutil/mem"
 )
 
-const BaseUploadPath = "C:\\ci_auto_publish\\"
+const BaseUploadPath = "D:\\ci_auto_publish\\"
 
 func TimeParseYYYYMMDD(in string, sub string) (out time.Time, err error) {
 	layout := "2006" + sub + "01" + sub + "02"
@@ -39,20 +40,22 @@ func downfile(w http.ResponseWriter, r *http.Request) {
 	//r
 
 	fmt.Fprintln(w, r.Method)
-	// file, _ := os.Open(filename)
-	// defer file.Close()
 
-	// fileHeader := make([]byte, 512)
-	// file.Read(fileHeader)
+	filename = BaseUploadPath + ""
+	file, _ := os.Open(filename)
+	defer file.Close()
 
-	// fileStat, _ := file.Stat()
+	fileHeader := make([]byte, 512)
+	file.Read(fileHeader)
 
-	// w.Header().Set("Content-Disposition", "attachment; filename=" + filename)
-	// w.Header().Set("Content-Type", http.DetectContentType(fileHeader))
-	// w.Header().Set("Content-Length", strconv.FormatInt(fileStat.Size(), 10))
+	fileStat, _ := file.Stat()
 
-	// file.Seek(0, 0)
-	// io.Copy(w, file)
+	w.Header().Set("Content-Disposition", "attachment; filename="+filename)
+	w.Header().Set("Content-Type", http.DetectContentType(fileHeader))
+	w.Header().Set("Content-Length", strconv.FormatInt(fileStat.Size(), 10))
+
+	file.Seek(0, 0)
+	io.Copy(w, file)
 
 	// return
 }
