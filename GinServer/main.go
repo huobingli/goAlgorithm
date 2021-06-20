@@ -116,18 +116,18 @@ func HandleDownloadFile(c *gin.Context) {
 	filepath := path + filename
 	c.Writer.WriteHeader(http.StatusOK)
 	// 返回文件名
-	c.Header("Content-Disposition", "attachment; filename=" + filename)
+	c.Header("Content-Disposition", "attachment; filename="+filename)
 	c.Header("Content-Type", "application/text/plain")
 	c.File(filepath)
 }
 
 func HandleShowFile(c *gin.Context) {
-	//path := "D:\\ci\\autoBuild\\cd-tool\\output\\build\\"
-	//fileName := path + c.Query("name")
-	//fmt.Println(fileName)
-	//c.File(fileName)
+	path := "D:\\ci\\autoBuild\\cd-tool\\output\\build\\"
+	fileName := path + c.Query("name")
+	fmt.Println(fileName)
+	c.File(fileName)
 
-	http.FileServer(http.Dir(BaseUploadPath))
+	//http.FileServer(http.Dir(BaseUploadPath))
 	//http.FileServer()
 
 }

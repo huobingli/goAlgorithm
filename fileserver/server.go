@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -38,24 +37,31 @@ func getCurDay() (date int) {
 func downfile(w http.ResponseWriter, r *http.Request) {
 	//filename := get_filename_from_request()
 	//r
+	filename := r.FormValue("context")
+	//fmt.Fprintln(w, context)
+	//fmt.Fprintln(w, r.Method)
+	//filename := "1.txt"
+	filepath := BaseUploadPath + filename
 
-	fmt.Fprintln(w, r.Method)
-
-	filename = BaseUploadPath + ""
-	file, _ := os.Open(filename)
-	defer file.Close()
-
-	fileHeader := make([]byte, 512)
-	file.Read(fileHeader)
-
-	fileStat, _ := file.Stat()
-
+	w.Header().Set("Pragma", "No-cache")
+	w.Header().Set("Cache-Control", "No-cache")
 	w.Header().Set("Content-Disposition", "attachment; filename="+filename)
-	w.Header().Set("Content-Type", http.DetectContentType(fileHeader))
-	w.Header().Set("Content-Length", strconv.FormatInt(fileStat.Size(), 10))
+	w.Header().Set("Content-Type", "application/text/plain")
+	http.ServeFile(w, r, filepath)
+	// file, _ := os.Open(filename)
+	// defer file.Close()
 
-	file.Seek(0, 0)
-	io.Copy(w, file)
+	// fileHeader := make([]byte, 512)
+	// file.Read(fileHeader)
+
+	// fileStat, _ := file.Stat()
+
+	// w.Header().Set("Content-Disposition", "attachment; filename="+filename)
+	// w.Header().Set("Content-Type", http.DetectContentType(fileHeader))
+	// w.Header().Set("Content-Length", strconv.FormatInt(fileStat.Size(), 10))
+
+	// file.Seek(0, 0)
+	// io.Copy(w, file)
 
 	// return
 }
