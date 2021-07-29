@@ -117,7 +117,7 @@ func getdiskinfo(w http.ResponseWriter, r *http.Request) {
 
 func downfile(c *gin.Context) {
 	filename := c.Query("content")
-	path := "D:\\ci\\autoBuild\\cd-tool\\output\\build\\"
+	path := "D:\\client_pack\\work_dir"
 	filepath := path + filename
 	c.Writer.WriteHeader(http.StatusOK)
 	// 返回文件名
