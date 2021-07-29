@@ -1,36 +1,58 @@
+// file: main.go
+
 package main
 
 import (
+	"github.com/kataras/iris/_examples/mvc/overview/datasource"
+	"github.com/kataras/iris/_examples/mvc/overview/repositories"
+	"github.com/kataras/iris/_examples/mvc/overview/services"
+	"github.com/kataras/iris/_examples/mvc/overview/web/controllers"
+	"github.com/kataras/iris/_examples/mvc/overview/web/middleware"
+
 	"github.com/kataras/iris"
+	"github.com/kataras/iris/mvc"
 )
 
-//与嵌入式单页面应用程序相同但没有go-bindata，文件是"原始"存储在
-//当前系统目录
-var page = struct {
-	Title string
-}{"Welcome"}
-
-func newApp() *iris.Application {
-	app := iris.New()
-	app.RegisterView(iris.HTML("./public", ".html"))
-	app.Get("/", func(ctx iris.Context) {
-		ctx.ViewData("Page", page)
-		ctx.View("index.html")
-	})
-	//或者只是按原样提供index.html：
-	// app.Get("/{f:path}", func(ctx iris.Context) {
-	//     ctx.ServeFile("index.html", false)
-	// })
-	assetHandler := app.StaticHandler("./public", false, false)
-	//作为SPA的替代方案，您可以查看/routing /dynamic-path/root-wildcard
-	app.SPA(assetHandler)
-	return app
-}
 func main() {
-	app := newApp()
-	// http://localhost:8080
-	// http://localhost:8080/index.html
-	// http://localhost:8080/app.js
-	// http://localhost:8080/css/main.css
-	app.Run(iris.Addr(":8080"))
+	app := iris.New()
+	app.Logger().SetLevel("debug")
+
+	// 加载视图模板地址
+	app.RegisterView(iris.HTML("./web/views", ".html"))
+
+	// 注册控制器
+	// mvc.New(app.Party("/movies")).Handle(new(controllers.MovieController))
+	//你也可以使用  `mvc.Configure` 方法拆分编写 MVC 应用程序的配置。
+	// 如下所示：
+	mvc.Configure(app.Party("/movies"), movies)
+
+	// http://localhost:8080/movies
+	// http://localhost:8080/movies/1
+	app.Run(
+		// Start the web server at localhost:8080
+		iris.Addr("localhost:8080"),
+		// skip err server closed when CTRL/CMD+C pressed:
+		iris.WithoutServerError(iris.ErrServerClosed),
+		// enables faster json serialization and more:
+		iris.WithOptimizations,
+	)
+}
+
+// 注意 mvc.Application, 不是 iris.Application.
+func movies(app *mvc.Application) {
+	// Add the basic authentication(admin:password) middleware
+	// for the /movies based requests.
+	app.Router.Use(middleware.BasicAuth)
+
+	// 使用数据源中的一些（内存）数据创建 movie 的数据库。
+	repo := repositories.NewMovieRepository(datasource.Movies)
+	// 创建 movie 的服务，我们将它绑定到 movie 应用程序。
+	movieService := services.NewMovieService(repo)
+	app.Register(movieService)
+
+	//初始化控制器
+	// 注意，你可以初始化多个控制器
+	// 你也可以 使用 `movies.Party(relativePath)` 或者 `movies.Clone(app.Party(...))` 创建子应用。
+
+	app.Handle(new(controllers.MovieController))
 }
