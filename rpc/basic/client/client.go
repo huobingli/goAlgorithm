@@ -26,7 +26,7 @@ func main() {
 	defer xclient.Close()
 
 	args := example.Args{
-		A: 10,
+		A: 100,
 		B: 20,
 	}
 

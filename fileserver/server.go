@@ -15,7 +15,7 @@ import (
 	"github.com/shirou/gopsutil/mem"
 )
 
-const BaseUploadPath = "D:\\client_pack\\work_dir"
+const BaseUploadPath = "D:\\client_pack\\work_dir\\pdb_file"
 
 func TimeParseYYYYMMDD(in string, sub string) (out time.Time, err error) {
 	layout := "2006" + sub + "01" + sub + "02"

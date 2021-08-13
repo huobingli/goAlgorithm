@@ -39,17 +39,17 @@ func main() {
 }
 
 // 注意 mvc.Application, 不是 iris.Application.
-func movies(app *mvc.Application) {
-	// Add the basic authentication(admin:password) middleware
-	// for the /movies based requests.
-	app.Router.Use(middleware.BasicAuth)
 
-	// 使用数据源中的一些（内存）数据创建 movie 的数据库。
-	repo := repositories.NewMovieRepository(datasource.Movies)
-	// 创建 movie 的服务，我们将它绑定到 movie 应用程序。
-	movieService := services.NewMovieService(repo)
-	app.Register(movieService)
+	func movies(app *mvc.Application) {
+		// Add the basic authentication(admin:password) middleware
+		// for the /movies based requests.
+		app.Router.Use(middleware.BasicAuth)
 
+		// 使用数据源中的一些（内存）数据创建 movie 的数据库。
+		repo := repositories.NewMovieRepository(datasource.Movies)
+		// 创建 movie 的服务，我们将它绑定到 movie 应用程序。
+		movieService := services.NewMovieService(repo)
+		app.Register(movieService)
 	//初始化控制器
 	// 注意，你可以初始化多个控制器
 	// 你也可以 使用 `movies.Party(relativePath)` 或者 `movies.Clone(app.Party(...))` 创建子应用。
