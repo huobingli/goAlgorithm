@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	conn, err := redis.Dial("tcp", "47.114.171.118:6999")
+	conn, err := redis.Dial("tcp", "127.0.0.1:32333")
 	if err != nil {
 		fmt.Println("connect redis error :", err)
 		return

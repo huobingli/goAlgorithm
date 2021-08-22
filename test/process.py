@@ -1,4 +1,5 @@
-import psutil, time, ctypes
+import psutil, time
+from ctypes import *
 
 def getProcessInfo(p):
     try:
@@ -17,13 +18,13 @@ def getProcessInfo(p):
         handle = 0
         cpu = 0
         GDI = 0
-    if name == "Taskmgr.exe" and pid == 6108:
+    if name == "Taskmgr.exe" and pid == 20048:
         print([name, pid, handle, GDI, rss, vms, cpu])
 
 def getGDICount(PID):
-    PH = ctypes.windll.kernel32.OpenProcess(0x400, 0, PID)
-    GDIcount = ctypes.windll.user32.GetGuiResources(PH, 0)
-    ctypes.windll.kernel32.CloseHandle(PH)
+    PH = windll.kernel32.OpenProcess(0x400, 0, PID)
+    GDIcount = windll.user32.GetGuiResources(PH, 0)
+    windll.kernel32.CloseHandle(PH)
     return GDIcount
 
 def getAllProcessInfo():
@@ -46,6 +47,29 @@ def getAllProcessID():
         else:
             print(pinfo)
 
+def getPID(processName):
+    for proc in psutil.process_iter():
+        try:
+            if processName.lower() in proc.name().lower():
+                return proc.pid
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+    return None;
+
+def getGDIcount(PID):
+    PH = windll.kernel32.OpenProcess(0x400, 0, PID)
+    GDIcount = windll.user32.GetGuiResources(PH, 0)
+    windll.kernel32.CloseHandle(PH)
+    return GDIcount
+
+PID = getPID('Taskmgr.exe')
+
+def testGDI():
+    while True:
+        GDIcount = getGDIcount(PID)
+        print(f"{time.ctime()}, {GDIcount}")
+        time.sleep(1)
+
 if __name__ == '__main__':
-    getAllProcessInfo()
+    testGDI()
     
