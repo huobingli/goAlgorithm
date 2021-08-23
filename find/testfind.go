@@ -101,11 +101,12 @@ func GetHtmlV2(id string) string {
 
 func main() {
 
-	html := GetHtml()
-	fmt.Print(html)
-
-	// html := GetHtmlV2("T000025698")
+	// html := GetHtml()
 	// fmt.Print(html)
+	id := "T000025698"
+	ul := "http://ft.10jqka.com.cn/thsft/iFindService/CompanyLibrary/graph/ajax-get-firm-graph?orgid=%s&v=v2&position="
+	url := fmt.Sprintf(ul, id)
+	print(url)
 
 	// 保存文件
 }
