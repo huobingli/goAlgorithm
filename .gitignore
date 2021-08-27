@@ -10,3 +10,5 @@ public/
 
 *.txt
 *.pyc
+*.pdf
+*.csv
