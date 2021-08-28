@@ -1,18 +1,21 @@
-# import tabula
-
-# df = tabula.read_pdf("D:\\gitProject\\goAlgorithm\\find\\wood\\20210827_160316_ark.pdf", encoding='gbk', pages='all')
-# print(df)
-# for indexs in df.index:
-#     # 遍历打印企业名称
-#     print(df.loc[indexs].values[1].strip())
-
-
 import camelot
 
-tables = camelot.read_pdf("D:\\gitProject\\goAlgorithm\\find\\wood\\20210827_160316_ark.pdf", flavor='stream')
-print(tables[0].df)
-# tables.export('foo.csv', f='csv', compress=True) 
-# tables[0].to_csv('foo.csv')
-# tables[0].parsing_report
-for indexs in tables.index:
-    print(indexs)
+from arkETFStock import *
+from middleware import *
+
+def parse_pdf(_pdf_name):
+    tables = camelot.read_pdf(_pdf_name, flavor='stream')
+    array = tables[0].data
+    datetime = array[1:2][0]
+    time = datetime[0][6:]
+
+    for item in array[3:]:
+        aa = arkETFStock(item)
+        aa.setDateTime(time)
+        # print(aa.toArray())
+        insert_data(aa.toArray())
+
+
+if __name__ == '__main__':
+    file_name = "D:\\gitProject\\goAlgorithm\\find\\wood\\20210828_145754_ark.pdf"
+    parse_pdf(file_name)

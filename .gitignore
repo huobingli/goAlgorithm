@@ -12,3 +12,5 @@ public/
 *.pyc
 *.pdf
 *.csv
+
+setting.py
