@@ -1,0 +1,14 @@
+syntax = "v1"
+
+info (
+    title: // todo
+    desc: // todo
+    author: "test"
+    email: "test@test.com"
+)
+
+type (
+    addReq {
+        Book string '
+    }
+)
