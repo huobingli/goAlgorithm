@@ -22,8 +22,8 @@ func testmongo() {
 		return
 	}
 	//2.选择数据库 test
-	db = client.Database("test")
-
+	db = client.Database("test1")
+	fmt.Print(db)
 	//3.选择表 my_collection
 	collection = db.Collection("testcollection")
 	collection = collection
