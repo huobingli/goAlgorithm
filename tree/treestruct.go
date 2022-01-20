@@ -113,3 +113,8 @@ func PostOrder(n *Node) {
 	PreOrder(n.Right)
 	fmt.Printf("%v", n.Data)
 }
+
+// z形遍历
+func zOrder(n *Node) {
+
+}
