@@ -3,6 +3,7 @@ package main
 //client.go
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -47,7 +48,7 @@ func NewGreeterClient(cc grpc.ClientConnInterface) GreeterClient {
 
 func (c *greeterClient) SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error) {
 	out := new(HelloReply)
-	err := c.cc.Invoke(ctx, "/helloworld.v1.Greeter/SayHello", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/SayHello", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,9 +67,10 @@ func main() {
 	if len(os.Args) > 1 {
 		name = os.Args[1]
 	}
+	fmt.Println(name)
 	r, err := c.SayHello(context.Background(), &HelloRequest{Name: name})
 	if err != nil {
-		log.Fatal("could not greet: %v", err)
+		log.Fatal("could not greet: ", err)
 	}
 	log.Printf("Greeting: %s", r.Message)
 }
